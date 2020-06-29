@@ -1,247 +1,61 @@
-if !has('nvim')
-    set nocompatible
-endif
-set hidden
+" make copy to system clipboard
+set nocompatible
+filetype plugin indent on
+" On pressing tab, insert 2 spaces
+set expandtab
+" show existing tab with 2 spaces width
+set tabstop=2
+set softtabstop=2
+" when indenting with '>', use 2 spaces width
+set shiftwidth=2
+
+filetype plugin on
 syntax on
-filetype off
-
+" set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#rc()
+set rtp+=~/go/src/golang.org/x/lint/misc/vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
 
-" Let Vundle manage Vundle
+" let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
-
-" My Plugins
-if !has('nvim')
-    Plugin 'tpope/vim-sensible'
-endif
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-rails'
-Plugin 'tpope/vim-rake'
-Plugin 'nsf/gocode', {'rtp': 'vim/'}
-Plugin 'nanotech/jellybeans.vim'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'scrooloose/syntastic'
-Plugin 'scrooloose/nerdtree'
-Plugin 'jistr/vim-nerdtree-tabs'
-Plugin 'ctrlpvim/ctrlp.vim'
-Plugin 'tacahiroy/ctrlp-funky'
-Plugin 'rking/ag.vim'
-Plugin 'kana/vim-textobj-user'
-Plugin 'nelstrom/vim-textobj-rubyblock'
-Plugin 'vim-ruby/vim-ruby'
-Plugin 'slim-template/vim-slim'
-Plugin 'Raimondi/delimitMate'
-Plugin 'majutsushi/tagbar'
-Plugin 'bronson/vim-trailing-whitespace'
+Plugin 'mdempsky/gocode', {'rtp': 'vim/'}
 Plugin 'fatih/vim-go'
-Plugin 'jodosha/vim-godebug'
-Plugin 'Shougo/neocomplete.vim'
-Plugin 'Valloric/YouCompleteMe'
-Plugin 'Shougo/neosnippet'
-Plugin 'Shougo/neosnippet-snippets'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'tpope/vim-markdown'
-Plugin 'flazz/vim-colorschemes'
-Plugin 'jacoborus/tender'
-Plugin 'jnurmine/Zenburn'
-Plugin 'Yggdroot/indentLine'
-Plugin 'kien/tabman.vim' " Tab management
-Plugin 'szw/vim-ctrlspace'
-Plugin 'vim-scripts/cSyntaxAfter'
-Plugin 'elzr/vim-json'
-Plugin 'TaskList.vim'
-Plugin 'cespare/vim-toml'
+Plugin 'vim-airline/vim-airline'
+Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'bronson/vim-trailing-whitespace'
 Plugin 'airblade/vim-gitgutter'
-Plugin 'mileszs/ack.vim'
-"for slat
-Plugin 'saltstack/salt-vim'
-" for yaml
-Plugin 'stephpy/vim-yaml'
-"for supervisor
-Plugin 'thiderman/vim-supervisor'
-"Plugin 'davidhalter/jedi-vim'
+Plugin 'scrooloose/nerdtree'
+Plugin 'rking/ag.vim'
+Plugin 'Raimondi/delimitMate'
+Plugin 'vim-syntastic/syntastic'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'rhysd/vim-clang-format'
+Plugin 'JamshedVesuna/vim-markdown-preview'
+Bundle 'ruanyl/vim-gh-line'
 
+" Plugin 'nanotech/jellybeans.vim'
+call vundle#end()            " required
 filetype plugin indent on
-
-let mapleader="\\"
-
-colorscheme apprentice
-"colorscheme zenburn
-"colorscheme Tomorrow-Night
-
-set cursorline
-set expandtab
-set modelines=0
-set shiftwidth=4
-set clipboard=unnamed
-set synmaxcol=250 " for those insanly long lines
-if !has('nvim')
-    set ttyscroll=11
-endif
-set encoding=utf-8
-set tabstop=4
-set wrap
+let g:ycm_path_to_python_interpreter = '/usr/bin/python3'
+let g:ycm_global_ycm_extra_conf ='~/.vim/bundle/YouCompleteMe/third_party/ycmd/.ycm_extra_conf.py'
+let g:ycm_extra_conf_globlist = ['~/.vim/bundle/YouCompleteMe/*','~/.vim/bundle/YouCompleteMe/third_party/ycmd/*']
+let g:ycm_show_diagnostics_ui = 0
+" set omnifunc=syntaxcomplete#Complete
+let g:ycm_confirm_extra_conf=1
 set number
-set nowritebackup
-set noswapfile
-set nobackup
-set hlsearch
-set ignorecase
-set smartcase
-set guifont=Monaco:h12
-set bg=dark
-set t_Co=256
-" for GVIM
-if has("gui_running")
-    "remove menu and toolbar
-   set guioptions-=m
-   set guioptions-=T
-   set guioptions-=l
-   set guioptions-=L
-   set guioptions-=r
-   set guioptions-=R
-   set columns=95
-   set lines=35
-endif
+set clipboard=unnamedplus
+set backspace=2
 
-nmap <leader>hs :set hlsearch! hlsearch?<CR>
-nmap <leader>rt :TagbarToggle<CR>
-" Automatic formatting
-autocmd BufWritePre *.rb :%s/\s\+$//e
-autocmd BufWritePre *.go :%s/\s\+$//e
-autocmd BufWritePre *.haml :%s/\s\+$//e
-autocmd BufWritePre *.html :%s/\s\+$//e
-autocmd BufWritePre *.scss :%s/\s\+$//e
-autocmd BufWritePre *.slim :%s/\s\+$//e
-
-au BufNewFile * set noeol
-au BufRead,BufNewFile *.go set filetype=go
-
-" Markdown
-autocmd BufNewFile,BufReadPost *.md set filetype=markdown
-
-" No show command
-autocmd VimEnter * set nosc
-
-" indent tabs
-set list lcs=tab:\|\ 
-
-" Quick ESC
-imap jj <ESC>
-
-" Jump to the next row on long lines
-map <Down> gj
-map <Up>   gk
-nnoremap j gj
-nnoremap k gk
-
-" format the entire file
-nmap <leader>fef ggVG=
-
-" Open new buffers
-nmap <leader>s<left>   :leftabove  vnew<cr>
-nmap <leader>s<right>  :rightbelow vnew<cr>
-nmap <leader>s<up>     :leftabove  new<cr>
-nmap <leader>s<down>   :rightbelow new<cr>
-
-" Tab between buffers
-noremap <tab> <c-w><c-w>
-
-" Switch between last two buffers
-nnoremap <leader><leader> <C-^>
-
-" Resize buffers
-if bufwinnr(1)
-  nmap Ä <C-W><<C-W><
-  nmap Ö <C-W>><C-W>>
-  nmap ö <C-W>-<C-W>-
-  nmap ä <C-W>+<C-W>+
-endif
-
-" NERDTree
-nmap <leader>n :NERDTreeTabsToggle<CR>
-let NERDTreeHighlightCursorline=1
-let g:nerdtree_tabs_open_on_console_startup=0
-
-" TaskList
-nmap <leader>tl :TaskList<CR>
-let g:tlWindowPosition=1
-
-"json
-let g:vim_json_syntax_conceal=0
-let g:indentLine_noConcealCursor=""
-let g:vim_json_warnings=1
-
-" Syntastic
-let g:syntastic_mode_map = { 'mode': 'passive' }
-let g:syntastic_ruby_exec = '~/.rvm/rubies/ruby-2.0.0-p0/bin/ruby'
-
-" CtrlP
-nnoremap <silent> t :CtrlP<cr>
-let g:ctrlp_working_path_mode = 2
-let g:ctrlp_by_filename = 1
-let g:ctrlp_max_files = 600
-let g:ctrlp_max_depth = 15
-let g:ctrlp_max_files=0
-let g:ctrlp_extensions = ['funky']
-
-" Quit with :Q
-command -nargs=0 Quit :qa!
-
-" for ack.vim
-if executable('ag')
-  let g:ackprg = 'ag --vimgrep'
-endif
-
-"Eclim
-let g:EclimCompletionMethod = 'omnifunc'
-let g:EclimJavaCallHierarchyDefaultAction = "tabe"
-let g:EclimJavaNewOpenAction = "tabe"
-let g:EclimJavaSearchSingleResult = "tabe"
-let g:EclimLoggingDisabled = 1
-
-if !exists('g:neocomplcache_force_omni_patterns')
-  let g:neocomplcache_force_omni_patterns = {}
-endif
-let g:neocomplcache_force_omni_patterns.java = '\k\.\k*'
-
-
-" Plugin key-mappings.
-imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-xmap <C-k>     <Plug>(neosnippet_expand_target)
-
-" SuperTab like snippets behavior.
-imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)"
-\: pumvisible() ? "\<C-n>" : "\<TAB>"
-smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)"
-\: "\<TAB>"
-
-" For snippet_complete marker.
-if has('conceal')
-  set conceallevel=2 concealcursor=i
-endif
-
-"for neo snippet
-" Plugin key-mappings.
-imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-xmap <C-k>     <Plug>(neosnippet_expand_target)
-
-" SuperTab like snippets behavior.
-imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)"
-\: pumvisible() ? "\<C-n>" : "\<TAB>"
-smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)"
-\: "\<TAB>"
-
-" For vim-go
+" vim-go related config
+let g:go_test_show_name = 1
+let g:go_test_timeout= '10m'
+let g:go_auto_type_info = 1
+let g:go_fmt_autosave = 1
+let g:go_fold_enable = ['block', 'import', 'varconst', 'package_comment']
 au FileType go nmap <leader>i <Plug>(go-info)
 au FileType go nmap <Leader>gd <Plug>(go-doc)
 au FileType go nmap <Leader>gv <Plug>(go-doc-vertical)
@@ -254,7 +68,9 @@ au FileType go nmap <leader>dg <Plug>(go-def)
 au FileType go nmap <Leader>ds <Plug>(go-def-split)
 au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
 au FileType go nmap <Leader>dt <Plug>(go-def-tab)
-let g:go_fmt_command = "goimports"
+" default go_fmt is gofmt
+let g:go_fmt_options = { 'gofmt': '-s' }
+let g:go_test_show_name = 1
 let g:go_snippet_engine = "neosnippet"
 let g:go_bin_path = expand("~/.gotools")
 let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
@@ -272,73 +88,34 @@ let g:go_highlight_build_constraints = 1
 let g:go_highlight_types = 1
 let g:go_highlight_fields = 1
 let g:go_highlight_extra_types = 1
-" This trigger takes advantage of the fact that the quickfix window can be
-" easily distinguished by its file-type, qf. The wincmd J command is
-" equivalent to the Ctrl+W, Shift+J shortcut telling Vim to move a window to
-" the very bottom (see :help :wincmd and :help ^WJ).
-autocmd FileType qf wincmd J
-" https://github.com/fatih/vim-go/issues/145
-set synmaxcol=192
-
-" code searches
-" The Silver Searcher
-" https://github.com/ggreer/the_silver_searcher
-if executable('ag')
-  " Use ag over grep
-  set grepprg=ag\ --nogroup\ --nocolor
-
-  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-
-  " ag is fast enough that CtrlP doesn't need to cache
-  let g:ctrlp_use_caching = 0
-
-  " bind K to grep word under cursor
-  nnoremap <Leader>k :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
-endif
-
-" set go path
-let $GOPATH = expand ("~/code/go")
-set rtp+=$GOPATH/src/github.com/golang/lint/misc/vim
-"autocmd BufWritePost,FileWritePost *.go execute 'Lint' | cwindow
-
-"eclim
-nnoremap <leader>jd :JavaSearch<cr>
-let g:SuperTabDefaultCompletionType = 'context'
-
-"delimitMate
-let delimitMate_expand_cr = 1
-
-"YouCompleteMe
-let g:ycm_autoclose_preview_window_after_insertion = 1
-
-"cSyntaxAfter
-autocmd! FileType c,cpp,java,php,python,go call CSyntaxAfter()
-
-" Enable mouse in iterm
-set mouse=a
-
-" ruby
-au FileType ruby set nocursorline " disable cursor line for ruby files
-
-"
-set clipboard=unnamed
-if has('nvim')
-    set clipboard+=unnamedplus
-    noremap <leader>nt :tabe term://zsh<cr>
-    " vim-go
-    let g:go_term_mode = "split"
-    let g:go_term_enabled = 1
-endif
-
-"airline
-let g:airline_powerline_fonts = 1
-let g:airline_theme='tomorrow'
-
-" conceal
-set conceallevel=0
-
-" give us 256 color schemes!
-"set term=screen-256color
+let g:go_guru_scope = ["github.com/NVIDIA/aistore/..."]
+let g:ycm_use_clangd = 0
+" necomplete related config
+let g:neocomplete#enable_at_startup = 1
+let g:go_rename_command = 'gopls'
 set list
 set listchars=tab:▸\ ,eol:¬
+
+" Enable using mouse in iterm
+set mouse=a
+
+" NERDTree
+nmap <leader>n :NERDTreeToggle<CR>
+let NERDTreeHighlightCursorline=1
+let g:nerdtree_open_on_console_startup=0
+
+let vim_markdown_preview_github=1
+" ag under cursor
+nmap <Leader>k :Ag <cword> .<CR>
+autocmd BufWritePre * %s/\s\+$//e
+" autocmd BufWritePost,FileWritePost *.go execute 'Lint' | cwindow
+
+let g:gitgutter_use_colorscheme=1
+let g:gitgutter_override_sign_column_highlight = 0
+highlight clear SignColumn
+highlight GitGutterAdd ctermfg=2
+highlight GitGutterChange ctermfg=3
+highlight GitGutterDelete ctermfg=1
+highlight GitGutterChangeDelete ctermfg=4
+
+let g:gh_gitlab_domain = "https://gitlab-master.nvidia.com/aistorage/aistore"
